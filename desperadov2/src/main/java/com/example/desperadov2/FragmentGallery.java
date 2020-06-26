@@ -21,12 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentGallery extends Fragment{
-
+    List<Album> mAlbums;
     RecyclerView mRecyclerViewGallery;
     GalleryAdapter mGalleryAdapter;
     private static final int ITEM_BEFORE_LOAD = 3;
     static int page = 0;
-    List<Album> mAlbums;
+
 
     private FragmentGallery() {
         mAlbums = new ArrayList<>();
