@@ -1,5 +1,6 @@
 package com.example.desperadov2;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Album {
@@ -8,7 +9,7 @@ public class Album {
     private String mTitle;
     private String mDate;
     private String mPlace;
-    private List<Photo> mPhotos;
+    private List<Photo> mPhotos = new ArrayList<>();
 
     public void addPhotoToAlbum(Photo photo) {
         mPhotos.add(photo);

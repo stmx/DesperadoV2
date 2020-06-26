@@ -1,5 +1,6 @@
 package com.example.desperadov2;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,9 +29,9 @@ public class FragmentGallery extends Fragment{
     static int page = 0;
 
 
-    private FragmentGallery() {
-//        mAlbums = new ArrayList<>();
-    }
+//    private FragmentGallery() {
+////        mAlbums = new ArrayList<>();
+//    }
     public static Fragment newInstance() {
         return new FragmentGallery();
     }
@@ -84,23 +85,31 @@ public class FragmentGallery extends Fragment{
         }
     }
 
-    private class GalleryHolder extends RecyclerView.ViewHolder {
+    private class GalleryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView mImageViewThumbnails;
         TextView mTextViewTitle;
         TextView mTextViewDate;
         TextView mTextViewPlace;
+        Album mAlbum;
         public GalleryHolder(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
             super(inflater.inflate(R.layout.item_gallery, container, false));
             mImageViewThumbnails = itemView.findViewById(R.id.image_view_item_gallery);
             mTextViewDate = itemView.findViewById(R.id.text_view_date);
             mTextViewPlace = itemView.findViewById(R.id.text_view_place);
             mTextViewTitle = itemView.findViewById(R.id.text_view_title);
+            itemView.setOnClickListener(this);
         }
         public void bind(Album album) {
+            mAlbum = album;
             mTextViewTitle.setText(album.getTitle());
             mTextViewPlace.setText(album.getPlace());
             mTextViewDate.setText(album.getDate());
             Glide.with(getActivity()).load(album.getURLThumbnailAlbum()).into(mImageViewThumbnails);
+        }
+        @Override
+        public void onClick(View v) {
+            Intent intent = ActivityAlbum.newIntent(getActivity(),mAlbum.getURLAlbum());
+            startActivity(intent);
         }
     }
     private class DownloadGalleryItems extends AsyncTask<String, Void, List<Album>> {
