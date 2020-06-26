@@ -1,0 +1,3 @@
+rootProject.name='Desperado'
+include ':app'
+include ':desperadov2'
