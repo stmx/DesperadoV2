@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentGallery extends Fragment{
-    List<Album> mAlbums;
+
     RecyclerView mRecyclerViewGallery;
     GalleryAdapter mGalleryAdapter;
     private static final int ITEM_BEFORE_LOAD = 3;
@@ -29,7 +29,7 @@ public class FragmentGallery extends Fragment{
 
 
     private FragmentGallery() {
-        mAlbums = new ArrayList<>();
+//        mAlbums = new ArrayList<>();
     }
     public static Fragment newInstance() {
         return new FragmentGallery();
@@ -52,7 +52,7 @@ public class FragmentGallery extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
-        mGalleryAdapter = new GalleryAdapter();
+        mGalleryAdapter = new GalleryAdapter(AlbumSingleton.get().getAlbums());
         mRecyclerViewGallery = view.findViewById(R.id.recycler_view_gallery);
         mRecyclerViewGallery.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerViewGallery.setAdapter(mGalleryAdapter);
@@ -60,7 +60,10 @@ public class FragmentGallery extends Fragment{
     }
 
     private class GalleryAdapter extends RecyclerView.Adapter<GalleryHolder> {
-
+        List<Album> mAlbums;
+        public GalleryAdapter(List<Album> albums) {
+            mAlbums = albums;
+        }
         @NonNull
         @Override
         public GalleryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -113,8 +116,8 @@ public class FragmentGallery extends Fragment{
         }
         @Override
         protected void onPostExecute(List<Album> albums) {
-            int start = mAlbums.size();
-            mAlbums.addAll(albums);
+            int start = AlbumSingleton.get().getAlbums().size();
+            AlbumSingleton.get().addAlbum(albums);
             mGalleryAdapter.notifyItemInserted(start);
         }
     }
