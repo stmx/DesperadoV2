@@ -19,6 +19,9 @@
         <activity android:name=".ActivityAlbum">
 
         </activity>
+        <activity android:name=".ActivityPhoto">
+
+        </activity>
     </application>
 
 </manifest>

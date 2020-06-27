@@ -1,5 +1,6 @@
 package com.example.desperadov2;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -76,15 +77,24 @@ public class FragmentAlbum extends Fragment {
             return mAlbum.getPhotos().size();
         }
     }
-    public class AlbumHolder extends RecyclerView.ViewHolder {
+    public class AlbumHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ImageView mImageViewItemAlbum;
+        private Photo mPhoto;
         public AlbumHolder(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
             super(inflater.inflate(R.layout.item_album, container,false));
             mImageViewItemAlbum = itemView.findViewById(R.id.image_view_item_album);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Photo photo) {
+            mPhoto = photo;
             Glide.with(getActivity()).load(photo.getURLThumbnailPhoto()).into(mImageViewItemAlbum);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = ActivityPhoto.newIntent(getActivity(),mPhoto.getURLPhoto());
+            startActivity(intent);
         }
     }
 
