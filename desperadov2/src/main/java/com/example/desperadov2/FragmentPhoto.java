@@ -101,8 +101,8 @@ public class FragmentPhoto extends Fragment {
                     public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
                         w = bitmap.getWidth();
                         h = bitmap.getHeight();
-//                        mImageViewPhoto.setW(w);
-//                        mImageViewPhoto.setH(h);
+                        mImageViewPhoto.setW(w);
+                        mImageViewPhoto.setH(h);
                         mImageViewPhoto.setImageBitmap(bitmap);
                     }
                 });
