@@ -17,14 +17,20 @@ public class DesperadoBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String PRIMARY_KEY = " primary key";
-        String requestCreateTable = "create table " + AlbumTable.NAME + "("+
+        String requestCreateAlbumTable = "create table " + AlbumTable.NAME + "("+
                 AlbumTable.Cols.PLACE + ", " +
                 AlbumTable.Cols.TITLE + ", " +
                 AlbumTable.Cols.DATE + ", " +
                 AlbumTable.Cols.URL_ALBUM + PRIMARY_KEY+", " +
                 AlbumTable.Cols.THUMBNAIL_URL +
                 ")";
-        db.execSQL(requestCreateTable);
+        db.execSQL(requestCreateAlbumTable);
+        String requestCreatePhotoTable = "create table " + PhotoTable.NAME + "("+
+                PhotoTable.Cols.URL_PHOTO + PRIMARY_KEY+", " +
+                PhotoTable.Cols.THUMBNAIL_URL + ", " +
+                PhotoTable.Cols.URL_ALBUM +
+                ")";
+        db.execSQL(requestCreatePhotoTable);
     }
 
     @Override

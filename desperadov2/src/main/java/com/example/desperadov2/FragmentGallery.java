@@ -36,16 +36,17 @@ public class FragmentGallery extends Fragment{
         return new FragmentGallery();
     }
 
-    private String nextPageURL() {
+    private String nextPageURL(int size) {
         String START_URL = "https://xn--j1adfnc.xn--80ahbca0ddjg.xn--p1ai/category/photo/";
-        page++;
+//        page++;
+        page = (int) size / 10 + 1;
         return (START_URL + "page/" + page + "/");
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new DownloadGalleryItems().execute(nextPageURL());
+        new DownloadGalleryItems().execute(nextPageURL(0));
 
     }
 
@@ -76,12 +77,16 @@ public class FragmentGallery extends Fragment{
             Album album = mAlbums.get(position);
             holder.bind(album);
             if (mAlbums.size() - position < ITEM_BEFORE_LOAD) {
-                new DownloadGalleryItems().execute(nextPageURL());
+                new DownloadGalleryItems().execute(nextPageURL(mAlbums.size()));
             }
         }
         @Override
         public int getItemCount() {
             return mAlbums.size();
+        }
+
+        public void setAlbums(List<Album> albums) {
+            mAlbums = albums;
         }
     }
 
@@ -126,7 +131,8 @@ public class FragmentGallery extends Fragment{
         @Override
         protected void onPostExecute(List<Album> albums) {
             int start = AlbumSingleton.get(getActivity()).getAlbums().size();
-            AlbumSingleton.get(getActivity()).addAlbum(albums);
+            AlbumSingleton.get(getActivity()).add(albums);
+            mGalleryAdapter.setAlbums(AlbumSingleton.get(getActivity()).getAlbums());
             mGalleryAdapter.notifyItemInserted(start);
         }
     }

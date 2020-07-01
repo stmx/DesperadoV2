@@ -40,17 +40,17 @@ public class Parser {
         }
         return albums;
     }
-    public static List<Photo> parserPhotoByAlbum(Album[] album) throws IOException{
+    public static List<Photo> parserPhotoByAlbum(String[] albumURL) throws IOException{
         List<Photo> photos = new ArrayList<>();
         Photo photo;
-        Document doc = Jsoup.connect(album[0].getURLAlbum())
+        Document doc = Jsoup.connect(albumURL[0])
                 .userAgent("Chrome/4.0.249.0 Safari/532.5")
                 .referrer("http://www.google.com")
                 .get();
         Elements listNews = doc.getElementsByClass("wppa-tn-img-container");
         for (Element element : listNews) {
             photo = new Photo();
-            photo.setAlbum(album[0]);
+            photo.setAlbumURL(albumURL[0]);
             photo.setURLPhoto(element.select("a").attr("href"));
             photo.setURLThumbnailPhoto(element.select("img").attr("src"));
 //            album[0].addPhotoToAlbum(photo);
