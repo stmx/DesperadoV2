@@ -2,6 +2,7 @@ package com.example.desperadov2;
 
 import android.util.Log;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class Parser {
             album.setURLThumbnailAlbum(element.getElementsByClass("td-module-thumb").select("img").attr("src"));
             //disko.setPhotoUrl(parserListPhotoUrl(disko.getURL()));
             albums.add(album);
+
             elemrntsd++;
             Log.i(TAG, "page "+page+"\tparse element"+elemrntsd);
         }

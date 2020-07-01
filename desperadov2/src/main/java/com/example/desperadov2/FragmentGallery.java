@@ -25,7 +25,7 @@ public class FragmentGallery extends Fragment{
 
     RecyclerView mRecyclerViewGallery;
     GalleryAdapter mGalleryAdapter;
-    private static final int ITEM_BEFORE_LOAD = 3;
+    private static final int ITEM_BEFORE_LOAD = 2;
     static int page = 0;
 
 
@@ -53,7 +53,7 @@ public class FragmentGallery extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
-        mGalleryAdapter = new GalleryAdapter(AlbumSingleton.get().getAlbums());
+        mGalleryAdapter = new GalleryAdapter(AlbumSingleton.get(getActivity()).getAlbums());
         mRecyclerViewGallery = view.findViewById(R.id.recycler_view_gallery);
         mRecyclerViewGallery.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerViewGallery.setAdapter(mGalleryAdapter);
@@ -125,8 +125,8 @@ public class FragmentGallery extends Fragment{
         }
         @Override
         protected void onPostExecute(List<Album> albums) {
-            int start = AlbumSingleton.get().getAlbums().size();
-            AlbumSingleton.get().addAlbum(albums);
+            int start = AlbumSingleton.get(getActivity()).getAlbums().size();
+            AlbumSingleton.get(getActivity()).addAlbum(albums);
             mGalleryAdapter.notifyItemInserted(start);
         }
     }
