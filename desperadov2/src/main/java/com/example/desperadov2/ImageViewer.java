@@ -18,7 +18,7 @@ import android.widget.Scroller;
 
 @SuppressLint("AppCompatCustomView")
 public class ImageViewer extends ImageView implements View.OnTouchListener{
-//    private final GestureDetector gestureDetector;
+
     private final ScaleGestureDetector mScaleGestureDetector;
     private int W,H;
     private int scrW, scrH;//видимый размер view'а
@@ -64,7 +64,6 @@ public class ImageViewer extends ImageView implements View.OnTouchListener{
         super(context,attrs);
         mContext = context;
         scroller = new Scroller(this.getContext());
-//        gestureDetector = new GestureDetector(context, new MyGestureListener());
         setOnTouchListener(this);
         mScaleGestureDetector = new ScaleGestureDetector(context, new MyScaleGestureListener());
         matrix = new Matrix();

@@ -31,8 +31,6 @@ public class FragmentPhoto extends Fragment {
     private static final String TAG_PHOTO_URL = "photo_URL";
     private String mPhotoURL;
     private ImageViewer mImageViewPhoto;
-    private GestureDetector mGestureDetector;
-    private ScaleGestureDetector mScaleGestureDetector;
     private float mScaleFactor = 1.0f;
     static int countZoom = 0;
     static int borderX = 100;
@@ -50,7 +48,6 @@ public class FragmentPhoto extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPhotoURL = (String) getArguments().getSerializable(TAG_PHOTO_URL);
-
     }
 
     @SuppressLint("WrongViewCast")
@@ -59,40 +56,6 @@ public class FragmentPhoto extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_photo, container, false);
         mImageViewPhoto = v.findViewById(R.id.image_view_photo);
-
-//        mGestureDetector = new GestureDetector(mImageViewPhoto.getContext(), new GestureListenerScroll());
-
-//        mGestureDetector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
-//            @Override
-//            public boolean onSingleTapConfirmed(MotionEvent e) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onDoubleTap(MotionEvent e) {
-//                countZoom++;
-//                mScaleFactor *= 2;
-//                if (countZoom == 3) {
-//                    countZoom = 0;
-//                    mScaleFactor = 1;
-//                }
-//                mImageViewPhoto.animate().scaleX(mScaleFactor).scaleY(mScaleFactor).setDuration(300);
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onDoubleTapEvent(MotionEvent e) {
-//                return false;
-//            }
-//        });
-//        mImageViewPhoto.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                mScaleGestureDetector.onTouchEvent(event);
-//                return true;
-//            }
-//        });
-
         Glide.with(getActivity())
                 .asBitmap()
                 .load(mPhotoURL)
@@ -106,15 +69,12 @@ public class FragmentPhoto extends Fragment {
                         mImageViewPhoto.setImageBitmap(bitmap);
                     }
                 });
-//        mScaleGestureDetector = new ScaleGestureDetector(getActivity(), new ScaleListener());
         return v;
     }
 
     class GestureListenerScroll extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-//            Log.i("mGestureDetector", e2.toString());
-//            Log.i("mGestureDetector", String.valueOf(mImageViewPhoto.getScrollX()));
 
             borderX =100* (int)mScaleFactor;
             Log.i("mGestureDetector", String.valueOf(borderX));
@@ -141,24 +101,4 @@ public class FragmentPhoto extends Fragment {
         }
     }
 
-//    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-//        @Override
-//        public boolean onScaleBegin(ScaleGestureDetector detector) {
-//            Log.i("scaleFactor", "scaleBegin");
-//            return super.onScaleBegin(detector);
-//        }
-//
-//        @Override
-//        public boolean onScale(ScaleGestureDetector scaleGestureDetector){
-//            mScaleFactor *= scaleGestureDetector.getScaleFactor();
-//
-//            mScaleFactor = Math.max(1f,
-//                    Math.min(mScaleFactor, 10.0f));
-//            mScaleFactor = Filter.filt(mScaleFactor);
-//            Log.i("scaleFactor", String.valueOf(mScaleFactor));
-//            mImageViewPhoto.setScaleX(mScaleFactor);
-//            mImageViewPhoto.setScaleY(mScaleFactor);
-//            return true;
-//        }
-//    }
 }

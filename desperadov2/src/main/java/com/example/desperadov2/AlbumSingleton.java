@@ -14,7 +14,6 @@ import java.util.List;
 
 public class AlbumSingleton {
 
-//    List<Album> mAlbumList;
     private Context mContext;
     private SQLiteDatabase mDatabase;
     private static AlbumSingleton sAlbums;
@@ -45,11 +44,9 @@ public class AlbumSingleton {
                 mDatabase.insert(PhotoTable.NAME, null, values);
             }
         }
-//        mAlbumList.addAll(addAlbumList);
     }
 
     public List<Album> getAlbums() {
-//        return mAlbumList;
         List<Album> list = new ArrayList<>();
         DesperadoCursorWrapper cursor = query(AlbumTable.NAME,null, null);
         try {
@@ -78,12 +75,6 @@ public class AlbumSingleton {
         return list;
     }
     public Album getAlbum(String url) {
-//        for (Album album : mAlbumList) {
-//            if (album.getURLAlbum().equals(url)) {
-//                return album;
-//            }
-//        }
-//        return null;
         DesperadoCursorWrapper cursorWrapper = query(AlbumTable.NAME,AlbumTable.Cols.URL_ALBUM + " = ?", new String[] {url});
         try {
             if (cursorWrapper.getCount() == 0) {
