@@ -17,15 +17,15 @@ public class Photo{
         mURLThumbnailPhoto = URLThumbnailPhoto;
     }
 
-    public Album getAlbum() {
-        return mAlbum;
+    public String getAlbumURL() {
+        return mAlbumURL;
     }
 
-    public void setAlbum(Album album) {
-        mAlbum = album;
+    public void setAlbumURL(String album) {
+        mAlbumURL = album;
     }
 
     private String mURLPhoto;
     private String mURLThumbnailPhoto;
-    private Album mAlbum;
+    private String mAlbumURL;
 }

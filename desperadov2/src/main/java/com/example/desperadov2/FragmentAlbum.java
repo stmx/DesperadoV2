@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -23,13 +22,11 @@ import java.util.List;
 
 public class FragmentAlbum extends Fragment {
     private static final String TAG_ALBUM_URL = "album_URL";
-//    List<Photo> mPhotos;
     RecyclerView mRecyclerViewAlbum;
     AlbumAdapter mAlbumAdapter;
-    Album mAlbum;
+    String mAlbumURL;
 
     FragmentAlbum() {
-//        mPhotos = new ArrayList<>();
     }
     public static Fragment newInstance(String albumURL) {
         Bundle args = new Bundle();
@@ -42,10 +39,9 @@ public class FragmentAlbum extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String albumURL;
-        albumURL = getArguments().getString(TAG_ALBUM_URL);
-        mAlbum = AlbumSingleton.get().getAlbum(albumURL);
-        new downloadAlbumItems().execute(mAlbum);
+
+        mAlbumURL = getArguments().getString(TAG_ALBUM_URL);
+
     }
     @Nullable
     @Override
@@ -55,10 +51,14 @@ public class FragmentAlbum extends Fragment {
         mRecyclerViewAlbum = view.findViewById(R.id.recycler_view_album);
         mRecyclerViewAlbum.setLayoutManager(new GridLayoutManager(getActivity(),2));
         mRecyclerViewAlbum.setAdapter(mAlbumAdapter);
+        new downloadAlbumItems().execute(mAlbumURL);
         return view;
     }
     public class AlbumAdapter extends RecyclerView.Adapter<AlbumHolder> {
-
+        List<Photo> mPhotos;
+        AlbumAdapter() {
+            mPhotos = new ArrayList<>();
+        }
         @NonNull
         @Override
         public AlbumHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -68,13 +68,17 @@ public class FragmentAlbum extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull AlbumHolder holder, int position) {
-            Photo photo = mAlbum.getPhotos().get(position);
+            Photo photo = mPhotos.get(position);
             holder.bind(photo);
         }
 
         @Override
         public int getItemCount() {
-            return mAlbum.getPhotos().size();
+            return mPhotos.size();
+        }
+
+        public void setPhotos(List<Photo> photos) {
+            mPhotos = photos;
         }
     }
     public class AlbumHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -99,22 +103,25 @@ public class FragmentAlbum extends Fragment {
     }
 
 
-    private class downloadAlbumItems extends AsyncTask<Album, Void, List<Photo>> {
+    private class downloadAlbumItems extends AsyncTask<String, Void, List<Photo>> {
         @Override
-        protected List<Photo> doInBackground(Album... albums) {
-            List<Photo> photos = new ArrayList<>();
-            try {
-                photos = Parser.parserPhotoByAlbum(albums);
-            } catch (IOException e) {
-                e.printStackTrace();
+        protected List<Photo> doInBackground(String... albumURL) {
+            List<Photo> photos;
+            photos = AlbumSingleton.get(getActivity()).getPhotos(mAlbumURL);
+            if (photos.size() == 0) {
+                try {
+                    photos = Parser.parserPhotoByAlbum(albumURL);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             return photos;
         }
         @Override
         protected void onPostExecute(List<Photo> photos) {
-            mAlbum.setPhotos(photos);
+            mAlbumAdapter.setPhotos(photos);
             mAlbumAdapter.notifyDataSetChanged();
-//            mPhotos = photos;
+            AlbumSingleton.get(getActivity()).add(photos);
         }
     }
 }

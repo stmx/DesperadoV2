@@ -25,27 +25,24 @@ public class FragmentGallery extends Fragment{
 
     RecyclerView mRecyclerViewGallery;
     GalleryAdapter mGalleryAdapter;
-    private static final int ITEM_BEFORE_LOAD = 3;
+    private static final int ITEM_BEFORE_LOAD = 2;
     static int page = 0;
 
-
-//    private FragmentGallery() {
-////        mAlbums = new ArrayList<>();
-//    }
     public static Fragment newInstance() {
         return new FragmentGallery();
     }
 
-    private String nextPageURL() {
+    private String nextPageURL(int size) {
+//        return string value URL
         String START_URL = "https://xn--j1adfnc.xn--80ahbca0ddjg.xn--p1ai/category/photo/";
-        page++;
+        page = (int) size / 10 + 1;
         return (START_URL + "page/" + page + "/");
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new DownloadGalleryItems().execute(nextPageURL());
+        new DownloadGalleryItems().execute(nextPageURL(0));
 
     }
 
@@ -53,7 +50,7 @@ public class FragmentGallery extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
-        mGalleryAdapter = new GalleryAdapter(AlbumSingleton.get().getAlbums());
+        mGalleryAdapter = new GalleryAdapter(AlbumSingleton.get(getActivity()).getAlbums());
         mRecyclerViewGallery = view.findViewById(R.id.recycler_view_gallery);
         mRecyclerViewGallery.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerViewGallery.setAdapter(mGalleryAdapter);
@@ -61,6 +58,7 @@ public class FragmentGallery extends Fragment{
     }
 
     private class GalleryAdapter extends RecyclerView.Adapter<GalleryHolder> {
+//        adapter for recycler view
         List<Album> mAlbums;
         public GalleryAdapter(List<Album> albums) {
             mAlbums = albums;
@@ -75,13 +73,18 @@ public class FragmentGallery extends Fragment{
         public void onBindViewHolder(@NonNull GalleryHolder holder, int position) {
             Album album = mAlbums.get(position);
             holder.bind(album);
+//            need to download new albums for recyclerview
             if (mAlbums.size() - position < ITEM_BEFORE_LOAD) {
-                new DownloadGalleryItems().execute(nextPageURL());
+                new DownloadGalleryItems().execute(nextPageURL(mAlbums.size()));
             }
         }
         @Override
         public int getItemCount() {
             return mAlbums.size();
+        }
+
+        public void setAlbums(List<Album> albums) {
+            mAlbums = albums;
         }
     }
 
@@ -125,8 +128,9 @@ public class FragmentGallery extends Fragment{
         }
         @Override
         protected void onPostExecute(List<Album> albums) {
-            int start = AlbumSingleton.get().getAlbums().size();
-            AlbumSingleton.get().addAlbum(albums);
+            int start = AlbumSingleton.get(getActivity()).getAlbums().size();
+            AlbumSingleton.get(getActivity()).add(albums);
+            mGalleryAdapter.setAlbums(AlbumSingleton.get(getActivity()).getAlbums());
             mGalleryAdapter.notifyItemInserted(start);
         }
     }
