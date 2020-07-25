@@ -7,63 +7,37 @@ import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.animation.Interpolator;
 import android.widget.ImageView;
-import android.widget.Scroller;
 
 
 @SuppressLint("AppCompatCustomView")
 public class ImageViewer extends ImageView implements View.OnTouchListener{
+//custom view for zoom and translate
 
-    private final ScaleGestureDetector mScaleGestureDetector;
-    private int W,H;
-    private int scrW, scrH;//видимый размер view'а
-    private int scrollX, scrollY;// координаты скроллинга
-    float mScaleFactor = 1.0f;
-    private  Scroller scroller;
-    Context mContext;
-
-    Matrix matrix;
-    // We can be in one of these 3 states
     static final int NONE = 0;
     static final int DRAG = 1;
     static final int ZOOM = 2;
+    static final int CLICK = 3;
     int mode = NONE;
-    // Remember some things for zooming
-    PointF last = new PointF();
-    PointF start = new PointF();
-    float minScale = 1f;
-    float maxScale = 7f;
+    float saveScale = 1f;
+    static final float minScale = 1f;
+    static final float maxScale = 7f;
     float[] m;
     int viewWidth, viewHeight;
-    protected float origWidth, origHeight;
     int oldMeasuredWidth, oldMeasuredHeight;
-    float saveScale = 1f;
-    static final int CLICK = 3;
-    public void setH(int h) {
-        H = h;
-    }
-
-    public void setW(int w) {
-        W = w;
-    }
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        scrW = getWidth();
-        scrH = getHeight();
-    }
-
+    float origWidth, origHeight;
+    private final ScaleGestureDetector mScaleGestureDetector;
+    Context mContext;
+    Matrix matrix;
+    PointF last = new PointF();
+    PointF start = new PointF();
     public ImageViewer(Context context, AttributeSet attrs)
     {
         super(context,attrs);
         mContext = context;
-        scroller = new Scroller(this.getContext());
         setOnTouchListener(this);
         mScaleGestureDetector = new ScaleGestureDetector(context, new MyScaleGestureListener());
         matrix = new Matrix();
@@ -73,6 +47,7 @@ public class ImageViewer extends ImageView implements View.OnTouchListener{
     }
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+//      touch handler
         mScaleGestureDetector.onTouchEvent(event);
         PointF curr = new PointF(event.getX(), event.getY());
         switch (event.getAction()) {

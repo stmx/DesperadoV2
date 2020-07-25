@@ -22,14 +22,11 @@ import java.util.List;
 
 public class FragmentAlbum extends Fragment {
     private static final String TAG_ALBUM_URL = "album_URL";
-//    List<Photo> mPhotos;
     RecyclerView mRecyclerViewAlbum;
     AlbumAdapter mAlbumAdapter;
-    Album mAlbum;
     String mAlbumURL;
 
     FragmentAlbum() {
-//        mPhotos = new ArrayList<>();
     }
     public static Fragment newInstance(String albumURL) {
         Bundle args = new Bundle();
@@ -44,7 +41,6 @@ public class FragmentAlbum extends Fragment {
         super.onCreate(savedInstanceState);
 
         mAlbumURL = getArguments().getString(TAG_ALBUM_URL);
-//        mAlbum = AlbumSingleton.get(getActivity()).getAlbum(mAlbumURL);
 
     }
     @Nullable
@@ -62,9 +58,6 @@ public class FragmentAlbum extends Fragment {
         List<Photo> mPhotos;
         AlbumAdapter() {
             mPhotos = new ArrayList<>();
-/*            if (mPhotos.size() == 0) {
-                new downloadAlbumItems().execute(mAlbumURL);
-            }*/
         }
         @NonNull
         @Override
@@ -75,14 +68,12 @@ public class FragmentAlbum extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull AlbumHolder holder, int position) {
-//            Photo photo = mAlbum.getPhotos().get(position);
             Photo photo = mPhotos.get(position);
             holder.bind(photo);
         }
 
         @Override
         public int getItemCount() {
-//            return mAlbum.getPhotos().size();
             return mPhotos.size();
         }
 
@@ -128,11 +119,9 @@ public class FragmentAlbum extends Fragment {
         }
         @Override
         protected void onPostExecute(List<Photo> photos) {
-//            mAlbum.setPhotos(photos);
             mAlbumAdapter.setPhotos(photos);
             mAlbumAdapter.notifyDataSetChanged();
             AlbumSingleton.get(getActivity()).add(photos);
-//            mPhotos = photos;
         }
     }
 }

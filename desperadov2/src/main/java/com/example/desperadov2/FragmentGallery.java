@@ -28,17 +28,13 @@ public class FragmentGallery extends Fragment{
     private static final int ITEM_BEFORE_LOAD = 2;
     static int page = 0;
 
-
-//    private FragmentGallery() {
-////        mAlbums = new ArrayList<>();
-//    }
     public static Fragment newInstance() {
         return new FragmentGallery();
     }
 
     private String nextPageURL(int size) {
+//        return string value URL
         String START_URL = "https://xn--j1adfnc.xn--80ahbca0ddjg.xn--p1ai/category/photo/";
-//        page++;
         page = (int) size / 10 + 1;
         return (START_URL + "page/" + page + "/");
     }
@@ -62,6 +58,7 @@ public class FragmentGallery extends Fragment{
     }
 
     private class GalleryAdapter extends RecyclerView.Adapter<GalleryHolder> {
+//        adapter for recycler view
         List<Album> mAlbums;
         public GalleryAdapter(List<Album> albums) {
             mAlbums = albums;
@@ -76,6 +73,7 @@ public class FragmentGallery extends Fragment{
         public void onBindViewHolder(@NonNull GalleryHolder holder, int position) {
             Album album = mAlbums.get(position);
             holder.bind(album);
+//            need to download new albums for recyclerview
             if (mAlbums.size() - position < ITEM_BEFORE_LOAD) {
                 new DownloadGalleryItems().execute(nextPageURL(mAlbums.size()));
             }
