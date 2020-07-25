@@ -46,12 +46,12 @@ public class Parser {
                 .referrer("http://www.google.com")
                 .get();
         Elements listNews = doc.getElementsByClass("wppa-tn-img-container");
-        for (Element element : listNews.select("a")) {
+        for (Element element : listNews) {
             photo = new Photo();
             photo.setAlbum(album[0]);
-            photo.setURLPhoto(element.attr("href"));
-            photo.setURLThumbnailPhoto("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-            album[0].addPhotoToAlbum(photo);
+            photo.setURLPhoto(element.select("a").attr("href"));
+            photo.setURLThumbnailPhoto(element.select("img").attr("src"));
+//            album[0].addPhotoToAlbum(photo);
             photos.add(photo);
             Log.i(TAG, "parse photo");
         }
